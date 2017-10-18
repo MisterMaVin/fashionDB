@@ -1,0 +1,49 @@
+# atom 과 github 연동
+	github 주소 : https://github.com/MisterMaVin/fashionDB.git
+	git bash 설치 : https://git-scm.com/download/win
+	
+	git bash에서
+	> git config --global user.name MisterMaVin
+	> git config --global user.email r90nya@naver.com
+	
+	workspace 생성 및 이동
+		workspace : D:\fashion
+		README.txt 파일 생성
+	> cd D:\fashion
+	
+	git commit
+	> git init
+	> git add "README.txt"
+	> git commit -m "first commit"
+	> git remote add origin https://github.com/MisterMaVin/fashionDB.git
+	> git push -u origin master
+
+# apache web server에 workspace로 등록
+	C:\Bitnami\wampstack-5.6.30-2\apache2\conf\httpd.conf 수정
+		before
+			DocumentRoot "C:/Bitnami/wampstack-5.6.30-2/apache2/htdocs"
+			<Directory "C:/Bitnami/wampstack-5.6.30-2/apache2/htdocs">
+		after
+			DocumentRoot "D:\fashion"
+			<Directory "D:\fashion">
+			
+	접속 테스트 : http://localhost:80/registWardrobeDialog.php
+		이전 페이지로 링크된다.
+	php.ini 설정 변경
+		파일 위치 : C:\Bitnami\wampstack-5.6.30-2\php\php.ini
+		open_basedir = D:\fashion
+	접속 테스트 : http://localhost:80/registWardrobeDialog.php
+		접속이 안됨
+	검색하다 보니까 http://blog.naver.com/pjws0321/221014425509 이 글을 발견했다.
+		C:\Bitnami\wampstack-5.6.30-2\apache2\conf\bitnami\bitnami.conf 수정
+		수정하기 전에 httpd.conf 원복한다.
+	접속 완료
+	
+# php 접속 테스트
+	http://localhost:80/registWardrobeDialog.php
+	접속 완료
+	
+# github 작업 내용 commit
+	> git status
+	
+		
