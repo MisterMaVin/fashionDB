@@ -27,3 +27,37 @@
 		htdocs		fashion			ok	
 		
 	즉, DocumentRoot는 httpd.conf는 건드리지 말고 bitnami.conf만 수정해야 한다.
+
+# Cannot find a J2SE SDK installed at path: C:\java.
+	sqldeveloper 최초 시작 시에 java.exe 지정할 때 발생하는 에러
+	참조 : https://learningintheopen.org/2016/08/30/sql-developer-cannot-find-a-java-se-sdk-installed-at-path/
+		jdk 32 bit 설치 후 다시 테스트
+			1.7 이하 버전을 필요로 한다.
+				설치 페이지 : http://www.oracle.com/technetwork/java/javase/archive-139210.html
+			이미 1.8 을 설치하고 sql developer에 mapping해서 수정이 안된다.
+				참조 : http://pantarei.tistory.com/1973
+				C:\sqldeveloper\sqldeveloper\bin\sqldeveloper.conf 수정
+					before SetJavaHome C:\Program Files (x86)\Java\jdk1.8.0_151
+					after SetJavaHome C:\Program Files (x86)\Java\jdk1.7.0_80
+					
+			Unable to launch the Java Virtual Machine
+			Located at path:
+			C:\Program Files (x86)\Java\jdk1.7.0_80\jre\bin\client\jvm.dll
+				참조 : https://stackoverflow.com/questions/24008395/sql-developer-error-unable-to-find-java-virtual-machine
+				
+				그냥 1.6버전으로 설치하자
+				
+			Unable to launch the Java Virtual Machine
+			Located at path:
+			C:\Program Files (x86)\Java\jdk1.6.0_45\bin\msvcr71.dll
+				참조 : https://stackoverflow.com/questions/32891347/sql-developer-failed-to-start
+				C:\Program Files (x86)\Java\jdk1.6.0_45\bin\msvcr71.dll
+				>>>
+				C:\sqldeveloper\sqldeveloper\bin
+
+			C:\sqldeveloper\sqldeveloper.sh를 실행했을 때 아래의 에러 발생
+			/c/sqldeveloper/sqldeveloper/bin/sqldeveloper.conf: line 15: syntax error near unexpected token `('
+			/c/sqldeveloper/sqldeveloper/bin/sqldeveloper.conf: line 15: `SetJavaHome C:\Program Files (x86)\Java\jdk1.6.0_45'
+				jdk 1.6을 c:\java에 설치하고 다시 시도
+				
+	삭제 후 최신 sql developer를 내려받은 후 진행하자...

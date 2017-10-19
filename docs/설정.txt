@@ -45,5 +45,12 @@
 	
 # github 작업 내용 commit
 	> git status
+	> git add docs/
+	> git add index.html
+	> git add php/
+	> git commit -m "setting docs"
+	> git push -u origin master
+	
+# notepad++에서 tail 하기
 	
 		
