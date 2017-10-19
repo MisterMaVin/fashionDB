@@ -3,6 +3,10 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="../styles/form.css">
+<script>
+  UPLOADCARE_PUBLIC_KEY = "89bbd226fb29bf199354";
+</script>
+<script charset="utf-8" src="//ucarecdn.com/libs/widget/3.1.4/uploadcare.full.min.js"></script>
 <script type="text/javascript">
 function fnValidate() {
   var validateDomNameArray = ["cloth_name","category","color","size","brand","photo_location"];
@@ -28,7 +32,7 @@ function fnSubmit() {
 </script>
 </head>
 <body>
-<form name="inputForm" method="post" target="pagehidden" action="../wardrobe/registWardrobeProcess.php" enctype="multipart/form-data">
+<form name="inputForm" method="post" target="pagehidden" action="../wardrobe/registClothesProcess.php" enctype="multipart/form-data">
   <table>
     <tr>
       <td class="labelRequired">품명</td>
@@ -73,7 +77,10 @@ function fnSubmit() {
     </tr>
     <tr>
       <td class="labelRequired">Image</td>
-      <td class="field"><input type="file" name="photo_location" /></td>
+      <td class="field">
+        <!-- <input type="file" name="photo_location" /> -->
+        <input type="hidden" role="uploadcare-uploader" name="photo_location" data-images-only="true" />
+      </td>
     </tr>
     <tr>
       <td class="label">비고</td>

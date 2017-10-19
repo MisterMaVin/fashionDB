@@ -44,3 +44,20 @@
 	
 8. file upload를 uploadcare로 구현하기
 	https://www.youtube.com/watch?v=1iViYMeEqq0
+	
+	http://uploadcare.grsm.io/e/1xl 로 회원가입하면 egoing님한테 지원이 됨
+		어떻게 하는지 모르겠어서 http://uploadcare.com으로 그냥 가입
+		
+	기본으로 import해야 할 항목들 import하고 
+		<input type="hidden" role="uploadcare-uploader" name="photo_location" data-images-only="true" />
+	위의 element를 파일 업로드할 곳으로 위치시키면 파일이 업로드되고 난 후 cdnURL이 value로 들어가게 된다.
+	
+	그럼 그 url을 그대로 받아서 db에 저장하면 ok
+	
+	그런데 보여줄 때 url 그대로 보여주면 사진이 뒤집혔으면 뒤집힌대로 나오기 때문에 view에서는 해당 url 뒤에 -/scale_crop/200x200/를 붙여서 보여주자.
+	
+	그리고 사진을 클릭하면 원본을 팝업으로 보여주자.
+	
+9. 그리드 화면 만들기
+	
+	

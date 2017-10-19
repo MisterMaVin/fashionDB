@@ -1,82 +1,79 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "Qwer1234");
 mysqli_select_db($conn, "fashion");
-$result = mysqli_query($conn, "SELECT * FROM WARDROBE WHERE CLOTH_NO = '".$_GET['cloth_no']."'");
-$row = mysqli_fetch_assoc($result);
+$result = mysqli_query($conn, "SELECT * FROM WARDROBE");
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="../styles/form.css">
+  <link rel="stylesheet" type="text/css" href="../styles/list.css">
 <script type="text/javascript">
-function fnValidate() {
-  var validateDomNameArray = ["cloth_name","category","color","size","brand","photo_location"];
-  var vaildateDomName = null;
+function fnCheckAll(obj) {
+  var checkAllObj = document.getElementById("checkAll");
+  var checked = obj.checked;
+  var checkboxArray = document.getElementsByName("checkRow");
 
-  for (var k = 0; k < validateDomNameArray.length; k++)
+  if ( obj.id == "checkAll" )
   {
-    vaildateDomName = validateDomNameArray[k];
-    if ( eval("inputForm." + vaildateDomName + ".value") === "" )
+    for (var k = 0; k < checkboxArray.length; k++)
     {
-      alert(vaildateDomName + " is essential.");
-      return false;
+      checkboxArray[k].checked = checked;
     }
   }
-  return true;
-}
-function fnSubmit() {
-  if ( fnValidate() )
+  else
   {
-    inputForm.submit();
+    for (var k = 0; k < checkboxArray.length; k++)
+    {
+      if ( checkboxArray[k].checked != checked )
+      {
+        checkAllObj.checked = false;
+      }
+    }
+    checkAllObj.checked = checked;
   }
 }
 </script>
 </head>
 <body>
-<form name="inputForm" method="post" target="pagehidden" action="../registWardrobeProcess.php" enctype="multipart/form-data">
+<form>
   <table>
-    <tr>
-      <td class="labelRequired">품명</td>
-      <td class="field"><?php echo $row['cloth_name'] ?></td>
-    </tr>
-    <tr>
-      <td class="labelRequired">분류</td>
-      <td class="field"><?php echo $row['category'] ?></td>
-    </tr>
-    <tr>
-      <td class="labelRequired">색상</td>
-      <td class="field"><?php echo $row['color'] ?></td>
-    </tr>
-    <tr>
-      <td class="labelRequired">사이즈</td>
-      <td class="field"><?php echo $row['size'] ?></td>
-    </tr>
-    <tr>
-      <td class="label">용도</td>
-      <td class="field"><?php echo $row['usage'] ?></td>
-    </tr>
-    <tr>
-      <td class="labelRequired">브랜드</td>
-      <td class="field"><?php echo $row['brand'] ?></td>
-    </tr>
-    <tr>
-      <td class="labelRequired">Image</td>
-      <td class="field">
-        <img src="<?php echo $row['photo_location'] ?>" height="300"/>
-      </td>
-    </tr>
-    <tr>
-      <td class="label">비고</td>
-      <td class="field"><?php echo $row['note'] ?></td>
-    </tr>
-    <!--
-    <tr>
-      <td>참고 코디</td>
-      <td><input type="text" name="cloth_name" /></td>
-    </tr>
-  -->
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="checkAll" onchange="fnCheckAll(this)" /></th>
+        <th>품명</th>
+        <th>분류</th>
+        <th>색상</th>
+        <th>사이즈</th>
+        <th>용도</th>
+        <th>브랜드</th>
+        <th>Image</th>
+        <th>비고</th>
+      <tr>
+    </thead>
+    <tbody>
+<?php
+  $rowCnt = 0;
+    while( $row = mysqli_fetch_assoc($result) ) {
+    $rowClass = $rowCnt%2 ? "even" : "odd";
+
+    echo "<tr class=\"".$rowClass."\">";
+    echo "<td><input type=\"checkbox\" name=\"checkRow\" onchange=\"fnCheckAll(this)\" /></td>";
+    echo "<td><a href=\"../wardrobe/showClothesDialog.php?cloth_no=".$row['cloth_no']."\">".$row['cloth_name']."</a></td>";
+    echo "<td>".$row['category']."</td>";
+    echo "<td>".$row['color']."</td>";
+    echo "<td>".$row['size']."</td>";
+    echo "<td>".$row['usage']."</td>";
+    echo "<td>".$row['brand']."</td>";
+    echo "<td><a href=\"".$row['photo_location']."\">"."<img src=\"".$row['photo_location']."-/scale_crop/50x50/\" /></a></td>";
+    echo "<td>".$row['note']."</td>";
+    echo "</tr>";
+    $rowCnt++;
+  }
+?>
+    </tbody>
+
   </table>
 
 </form>
