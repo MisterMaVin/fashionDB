@@ -1,3 +1,12 @@
+<?php
+$conn = mysqli_connect("localhost", "root", "Qwer1234");
+mysqli_select_db($conn, "fashion");
+$result = mysqli_query($conn, "SELECT * FROM WARDROBE WHERE CLOTH_NO = '".$_GET['cloth_no']."'");
+$row = mysqli_fetch_assoc($result);
+
+$categoryRaw = mysqli_query($conn, "SELECT * FROM CODE WHERE PARENT_CODE = 'cloth_category'");
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +38,10 @@ function fnSubmit() {
     inputForm.submit();
   }
 }
+function fnApply() {
+  inputForm.isApply.value = "true";
+  fnSubmit();
+}
 </script>
 </head>
 <body>
@@ -36,30 +49,31 @@ function fnSubmit() {
   <table>
     <tr>
       <td class="labelRequired">품명</td>
-      <td class="field"><input type="text" name="cloth_name" /></td>
+      <td class="field"><input type="text" name="cloth_name" value="<?php echo $row['cloth_name'] ?>"/></td>
     </tr>
     <tr>
       <td class="labelRequired">분류</td>
       <td class="field">
         <select name="category">
-          <option value=""></option>
-          <option value="top">상의</option>
-          <option value="bottom">하의</option>
-          <option value="outer">아우터</option>
-          <option value="shoes">신발</option>
-          <option value="handkerchief">손수건</option>
-          <option value="accessory">악세서리</option>
-          <option value="etc">기타</option>
+          <option value=''>&nbsp;</option>
+<?php
+  $checkedExpr = "";
+  while ( $categoryRow = mysqli_fetch_assoc($categoryRaw) )
+  {
+    $checkedExpr = $categoryRow['code'] == $row['category'] ? "checked" : "";
+    echo "<option value=\"".$categoryRow['code']."\" ".$checkedExpr.">".$categoryRow['desc']."</option>";
+  }
+?>
         </select>
       </td>
     </tr>
     <tr>
       <td class="labelRequired">색상</td>
-      <td class="field"><input type="text" name="color" /></td>
+      <td class="field"><input type="text" name="color" value="<?php echo $row['color'] ?>"/></td>
     </tr>
     <tr>
       <td class="labelRequired">사이즈</td>
-      <td class="field"><input type="text" name="size" /></td>
+      <td class="field"><input type="text" name="size" value="<?php echo $row['size'] ?>"/></td>
     </tr>
     <tr>
       <td class="label">용도</td>
@@ -73,18 +87,27 @@ function fnSubmit() {
     </tr>
     <tr>
       <td class="labelRequired">브랜드</td>
-      <td class="field"><input type="text" name="brand" /></td>
+      <td class="field"><input type="text" name="brand" value="<?php echo $row['brand'] ?>"/></td>
     </tr>
     <tr>
       <td class="labelRequired">Image</td>
       <td class="field">
         <!-- <input type="file" name="photo_location" /> -->
         <input type="hidden" role="uploadcare-uploader" name="photo_location" data-images-only="true" />
+<?php if ( $row['photo_location'] != "" ) { ?>
+        <div>
+          <a href="<?php echo $row['photo_location'] ?>">
+            <img src="<?php echo $row['photo_location']."-/scale_crop/300x300/" ?>" />
+          </a>
+        </div>
+<?php } ?>
       </td>
     </tr>
     <tr>
       <td class="label">비고</td>
-      <td class="field"><input type="text" name="note" /></td>
+      <td class="field">
+          <textarea name="note" cols="50" rows="5"><?php echo $row['note'] ?></textarea>
+      </td>
     </tr>
     <!--
     <tr>
@@ -94,6 +117,7 @@ function fnSubmit() {
   -->
   </table>
 
+  <input type="button" value="Apply" onclick="fnApply()" /><input type="hidden" name="isApply" value="" />
   <input type="button" value="Done" onclick="fnSubmit()" />
   <input type="button" value="Cancel" onclick="javascript:top.close();" />
 

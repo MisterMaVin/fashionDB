@@ -53,4 +53,7 @@
 	
 # notepad++에서 tail 하기
 	
-		
+# 공유기의 IP 
+	https://www.whatismyip.com/
+		210.99.219.12
+		192.168.0.2

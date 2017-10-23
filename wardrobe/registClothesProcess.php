@@ -12,7 +12,15 @@ $sql = "INSERT INTO WARDROBE (`CLOTH_NAME`, `CATEGORY`, `COLOR`, `SIZE`, `USAGE`
 
 $result = mysqli_query($conn, $sql);
 $last_id = $conn->insert_id;
-
-// 4. redirect
-header('Location: ../wardrobe/showClothesDialog.php?cloth_no='.$last_id);
 ?>
+<script type="text/javascript">
+if ( "<?php echo $_POST['isApply'] ?>" == "true" )
+{
+  parent.inputForm.isApply.value = "";
+  alert("Complete.");
+}
+else
+{
+  parent.location.href = "../code/showClothesDialog.php?cloth_no=<?php echo $last_id ?>";
+}
+</script>

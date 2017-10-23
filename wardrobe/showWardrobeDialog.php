@@ -10,34 +10,73 @@ $result = mysqli_query($conn, "SELECT * FROM WARDROBE");
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="../styles/list.css">
 <script type="text/javascript">
-function fnCheckAll(obj) {
-  var checkAllObj = document.getElementById("checkAll");
-  var checked = obj.checked;
-  var checkboxArray = document.getElementsByName("checkRow");
-
-  if ( obj.id == "checkAll" )
+var winOpt = "resizable=yes,scrollbars=yes,height=500,width=400";
+function fnCreate() {
+  window.open("../wardrobe/registClothesDialog.php", "popup", winOpt);
+}
+function fnEdit() {
+  var checkRowArray = document.getElementsByName("checkRow");
+  var checkedRowCnt = 0;
+  var checkedRowVal = null;
+  for (var k = 0; k < checkRowArray.length; k++)
   {
-    for (var k = 0; k < checkboxArray.length; k++)
+    if ( checkRowArray[k].checked )
     {
-      checkboxArray[k].checked = checked;
+      checkedRowCnt++;
+      checkedRowVal = checkRowArray[k].value;
     }
+  }
+
+  if ( checkedRowCnt == 1 )
+  {
+    window.open("../wardrobe/registClothesDialog.php?cloth_no=" + checkedRowVal, "popup", winOpt);
   }
   else
   {
-    for (var k = 0; k < checkboxArray.length; k++)
+    alert("Select 1 row.");
+  }
+}
+function fnDelete() {
+  var checkRowArray = document.getElementsByName("checkRow");
+  var checkedRowCnt = 0;
+  var checkedRowVal = "";
+  for (var k = 0; k < checkRowArray.length; k++)
+  {
+    if ( checkRowArray[k].checked )
     {
-      if ( checkboxArray[k].checked != checked )
+      checkedRowCnt++;
+
+      if ( checkedRowVal !== "" )
       {
-        checkAllObj.checked = false;
+        checkedRowVal += "|";
       }
+
+      checkedRowVal += checkRowArray[k].value;
     }
-    checkAllObj.checked = checked;
+  }
+
+  if ( checkedRowCnt > 0 )
+  {
+    listForm.deleteClothes.value = checkedRowVal;
+    listForm.action = "../wardrobe/deleteClothesProcess.php";
+  }
+  else
+  {
+    alert("Select at least 1 row.");
   }
 }
 </script>
 </head>
 <body>
-<form>
+
+  <input type="button" value="Create" onclick="fnCreate()" />
+  <input type="button" value="Edit" onclick="fnEdit()" />
+  <input type="button" value="Delete" onclick="fnDelete()" />
+
+<form name="listForm" method="post" target="pagehidden">
+
+  <input type="text" name="deleteClothes" />
+
   <table>
     <thead>
       <tr>
@@ -55,11 +94,11 @@ function fnCheckAll(obj) {
     <tbody>
 <?php
   $rowCnt = 0;
-    while( $row = mysqli_fetch_assoc($result) ) {
+  while( $row = mysqli_fetch_assoc($result) ) {
     $rowClass = $rowCnt%2 ? "even" : "odd";
 
     echo "<tr class=\"".$rowClass."\">";
-    echo "<td><input type=\"checkbox\" name=\"checkRow\" onchange=\"fnCheckAll(this)\" /></td>";
+    echo "<td><input type=\"checkbox\" name=\"checkRow\" onchange=\"fnCheckAll(this)\" value=\"".$row['cloth_no']."\" /></td>";
     echo "<td><a href=\"../wardrobe/showClothesDialog.php?cloth_no=".$row['cloth_no']."\">".$row['cloth_name']."</a></td>";
     echo "<td>".$row['category']."</td>";
     echo "<td>".$row['color']."</td>";
@@ -77,6 +116,8 @@ function fnCheckAll(obj) {
   </table>
 
 </form>
+
+<iframe name="pagehidden" style="display:none;" />
 
 </body>
 </html>
