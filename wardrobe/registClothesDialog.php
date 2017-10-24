@@ -46,6 +46,9 @@ function fnApply() {
 </head>
 <body>
 <form name="inputForm" method="post" target="pagehidden" action="../wardrobe/registClothesProcess.php" enctype="multipart/form-data">
+
+  <input type="hidden" name="cloth_no" value="<?php echo $row['cloth_no'] ?>" />
+
   <table>
     <tr>
       <td class="labelRequired">품명</td>
@@ -57,11 +60,11 @@ function fnApply() {
         <select name="category">
           <option value=''>&nbsp;</option>
 <?php
-  $checkedExpr = "";
+  $selectedExpr = "";
   while ( $categoryRow = mysqli_fetch_assoc($categoryRaw) )
   {
-    $checkedExpr = $categoryRow['code'] == $row['category'] ? "checked" : "";
-    echo "<option value=\"".$categoryRow['code']."\" ".$checkedExpr.">".$categoryRow['desc']."</option>";
+    $selectedExpr = $categoryRow['code'] == $row['category'] ? "selected" : "";
+    echo "<option value=\"".$categoryRow['code']."\" ".$selectedExpr.">".$categoryRow['desc']."</option>";
   }
 ?>
         </select>
@@ -93,7 +96,7 @@ function fnApply() {
       <td class="labelRequired">Image</td>
       <td class="field">
         <!-- <input type="file" name="photo_location" /> -->
-        <input type="hidden" role="uploadcare-uploader" name="photo_location" data-images-only="true" />
+        <input type="hidden" role="uploadcare-uploader" name="photo_location" data-images-only="true" value="<?php echo $row['photo_location'] ?>" />
 <?php if ( $row['photo_location'] != "" ) { ?>
         <div>
           <a href="<?php echo $row['photo_location'] ?>">

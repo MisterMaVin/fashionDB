@@ -1,7 +1,7 @@
 <?php
 $conn = mysqli_connect("localhost", "root", "Qwer1234");
 mysqli_select_db($conn, "fashion");
-$result = mysqli_query($conn, "SELECT CODE, DESC, PARENT_CODE FROM CODE");
+$result = mysqli_query($conn, "SELECT * FROM CODE");
 ?>
 
 <!DOCTYPE html>
@@ -29,15 +29,76 @@ function fnCheckAll(obj) {
       if ( checkboxArray[k].checked != checked )
       {
         checkAllObj.checked = false;
+        return;
       }
     }
     checkAllObj.checked = checked;
+  }
+}
+var winOpt = "resizable=yes,scrollbars=yes,height=500,width=400";
+function fnCreate() {
+  window.open("../code/registCodeDialog.php", "popup", winOpt);
+}
+function fnEdit() {
+  var checkRowArray = document.getElementsByName("checkRow");
+  var checkedRowCnt = 0;
+  var checkedRowVal = null;
+  for (var k = 0; k < checkRowArray.length; k++)
+  {
+    if ( checkRowArray[k].checked )
+    {
+      checkedRowCnt++;
+      checkedRowVal = checkRowArray[k].value;
+    }
+  }
+
+  if ( checkedRowCnt == 1 )
+  {
+    window.open("../wardrobe/registClothesDialog.php?cloth_no=" + checkedRowVal, "popup", winOpt);
+  }
+  else
+  {
+    alert("Select 1 row.");
+  }
+}
+function fnDelete() {
+  var checkRowArray = document.getElementsByName("checkRow");
+  var checkedRowCnt = 0;
+  var checkedRowVal = "";
+  for (var k = 0; k < checkRowArray.length; k++)
+  {
+    if ( checkRowArray[k].checked )
+    {
+      checkedRowCnt++;
+
+      if ( checkedRowVal !== "" )
+      {
+        checkedRowVal += "|";
+      }
+
+      checkedRowVal += checkRowArray[k].value;
+    }
+  }
+
+  if ( checkedRowCnt > 0 )
+  {
+    listForm.deleteClothes.value = checkedRowVal;
+    listForm.action = "../wardrobe/deleteClothesProcess.php";
+  }
+  else
+  {
+    alert("Select at least 1 row.");
   }
 }
 </script>
 </head>
 <body>
 <form>
+
+  <input type="button" value="Create" onclick="fnCreate()" />
+  <input type="button" value="Edit" onclick="fnEdit()" />
+  <input type="button" value="Delete" onclick="fnDelete()" />
+
   <table>
     <thead>
       <tr>
@@ -57,7 +118,7 @@ function fnCheckAll(obj) {
     echo "<td><input type=\"checkbox\" name=\"checkRow\" onchange=\"fnCheckAll(this)\" /></td>";
     echo "<td><a href=\"../wardrobe/showCodeDialog.php?code=".$row['code']."\">".$row['code']."</a></td>";
     echo "<td>".$row['desc']."</td>";
-      echo "<td><a href=\"../wardrobe/showCodeDialog.php?code=".$row['parent_code']."\">".$row['parent_code']."</a></td>";
+    echo "<td><a href=\"../wardrobe/showCodeDialog.php?code=".$row['parent_code']."\">".$row['parent_code']."</a></td>";
     echo "</tr>";
     $rowCnt++;
   }

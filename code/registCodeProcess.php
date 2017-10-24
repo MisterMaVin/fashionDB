@@ -4,7 +4,7 @@ $conn = mysqli_connect("localhost", "root", "Qwer1234");
 mysqli_select_db($conn, "fashion");
 
 // 2. insert
-$sql = "INSERT INTO CODE (`CODE`, `DESC`, `PARENT_CODE`) VALUES('".$_POST['code']."', '".$_POST['desc']."', '".$_POST['parent_code']."')";
+$sql = "INSERT INTO CODE (`CODE`, `CODE_KO`, `DESC`, `PARENT_CODE`) VALUES('".$_POST['code']."', '".$_POST['code_ko']."', '".$_POST['desc']."', '".$_POST['parent_code']."')";
 
 $result = mysqli_query($conn, $sql);
 ?>

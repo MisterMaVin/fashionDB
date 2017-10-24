@@ -10,6 +10,31 @@ $result = mysqli_query($conn, "SELECT * FROM WARDROBE");
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="../styles/list.css">
 <script type="text/javascript">
+function fnCheckAll(obj) {
+  var checkAllObj = document.getElementById("checkAll");
+  var checked = obj.checked;
+  var checkboxArray = document.getElementsByName("checkRow");
+
+  if ( obj.id == "checkAll" )
+  {
+    for (var k = 0; k < checkboxArray.length; k++)
+    {
+      checkboxArray[k].checked = checked;
+    }
+  }
+  else
+  {
+    for (var k = 0; k < checkboxArray.length; k++)
+    {
+      if ( checkboxArray[k].checked != checked )
+      {
+        checkAllObj.checked = false;
+        return;
+      }
+    }
+    checkAllObj.checked = checked;
+  }
+}
 var winOpt = "resizable=yes,scrollbars=yes,height=500,width=400";
 function fnCreate() {
   window.open("../wardrobe/registClothesDialog.php", "popup", winOpt);
@@ -59,6 +84,7 @@ function fnDelete() {
   {
     listForm.deleteClothes.value = checkedRowVal;
     listForm.action = "../wardrobe/deleteClothesProcess.php";
+    listForm.submit();
   }
   else
   {
