@@ -1,6 +1,8 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "Qwer1234");
-mysqli_select_db($conn, "fashion");
+require("../config/config.php");
+require("../lib/db.php");
+
+$conn = db_init($config["host"], $config["duser"], $config["dpw"], $config["dname"]);
 $result = mysqli_query($conn, "SELECT * FROM CODE");
 ?>
 
@@ -54,7 +56,7 @@ function fnEdit() {
 
   if ( checkedRowCnt == 1 )
   {
-    window.open("../wardrobe/registClothesDialog.php?cloth_no=" + checkedRowVal, "popup", winOpt);
+    window.open("../code/editCodeDialog.php?code=" + checkedRowVal, "popup", winOpt);
   }
   else
   {
@@ -115,10 +117,10 @@ function fnDelete() {
     $rowClass = $rowCnt%2 ? "even" : "odd";
 
     echo "<tr class=\"".$rowClass."\">";
-    echo "<td><input type=\"checkbox\" name=\"checkRow\" onchange=\"fnCheckAll(this)\" /></td>";
-    echo "<td><a href=\"../wardrobe/showCodeDialog.php?code=".$row['code']."\">".$row['code']."</a></td>";
+    echo "<td><input type=\"checkbox\" name=\"checkRow\" onchange=\"fnCheckAll(this)\" value=\"".$row['code']."\" /></td>";
+    echo "<td><a href=\"../code/showCodeDialog.php?code=".$row['code']."\">".$row['code']."</a></td>";
     echo "<td>".$row['desc']."</td>";
-    echo "<td><a href=\"../wardrobe/showCodeDialog.php?code=".$row['parent_code']."\">".$row['parent_code']."</a></td>";
+    echo "<td><a href=\"../code/showCodeDialog.php?code=".$row['parent_code']."\">".$row['parent_code']."</a></td>";
     echo "</tr>";
     $rowCnt++;
   }

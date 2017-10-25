@@ -3,7 +3,15 @@ require("../config/config.php");
 require("../lib/db.php");
 
 $conn = db_init($config["host"], $config["duser"], $config["dpw"], $config["dname"]);
+$result = mysqli_query($conn, "SELECT * FROM CODE WHERE CODE = '".$_GET['code']."'");
+$row = mysqli_fetch_assoc($result);
+
 $parentCodeRaw = mysqli_query($conn, "SELECT * FROM CODE WHERE PARENT_CODE = ''");
+
+// 저장된 부모 코드의 한글명 조회
+$selectedParentCodeKoRaw = mysqli_query($conn, "SELECT `code_ko` FROM CODE WHERE CODE = '".$row['parent_code']."'");
+$selectedParentCodeKoRaw = mysqli_fetch_array($selectedParentCodeKoRaw);
+$selectedParentCodeKo = $selectedParentCodeKoRaw[0];
 ?>
 
 <!DOCTYPE html>
@@ -25,28 +33,32 @@ function fnValidate(formName) {
   <table>
     <tr>
       <td class="labelRequired">코드명</td>
-      <td class="field"><input type="text" name="code" value=""/></td>
+      <td class="field"><?php echo $row['code'] ?></td>
     </tr>
     <tr>
       <td class="labelRequired">코드명(한글)</td>
-      <td class="field"><input type="text" name="code_ko" value=""/></td>
+      <td class="field"><input type="text" name="code_ko" value="<?php echo $row['code_ko'] ?>"/></td>
     </tr>
     <tr>
       <td class="label">상세</td>
       <td class="field">
-          <textarea name="desc" cols="50" rows="5"></textarea>
+          <textarea name="desc" cols="50" rows="5"><?php echo $row['desc'] ?></textarea>
       </td>
     </tr>
     <tr>
       <td class="label">부모 코드</td>
       <td class="appended">
-        <input type="hidden" name="parent_code" value="" />
+        <input type="hidden" name="parent_code" value="<?php echo $row['parent_code'] ?>" />
+        <?php echo $selectedParentCodeKo ?>
+        <br />
         <select class="parent_code" onchange="fnDrawChildSelectbox(this, 'parent_code', '../code/getChildCodeList.php', 'code', 'code_ko', 'inputForm')">
           <option value=''>&nbsp;</option>
 <?php
+  $checkedExpr = "";
   while ( $parentCodeRow = mysqli_fetch_assoc($parentCodeRaw) )
   {
-    echo "<option value=\"".$parentCodeRow['code']."\">".$parentCodeRow['code_ko']."</option>";
+    $checkedExpr = $parentCodeRow['code'] == $row['parent_code'] ? "checked" : "";
+    echo "<option value=\"".$parentCodeRow['code']."\" ".$checkedExpr.">".$parentCodeRow['code_ko']."</option>";
   }
 ?>
         </select>

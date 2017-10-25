@@ -6,15 +6,15 @@
 </head>
 <body>
 
-  <div class="main-container">
-    <div class="right">
-      <iframe src="../code/showCodeListDialog.php" />
-    </div>
+  <!-- <div class="main-container"> -->
     <div class="left">
-      <iframe src="../wardrobe/showWardrobeDialog.php" />
+      <iframe src="../wardrobe/showWardrobeDialog.php"></iframe>
+    </div>
+    <div class="right">
+      <iframe src="../code/showCodeListDialog.php"></iframe>
     </div>
 
-  </div>
+  <!-- </div> -->
 
 </body>
 </html>

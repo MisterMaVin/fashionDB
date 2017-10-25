@@ -1,6 +1,8 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "Qwer1234");
-mysqli_select_db($conn, "fashion");
+require("../config/config.php");
+require("../lib/db.php");
+
+$conn = db_init($config["host"], $config["duser"], $config["dpw"], $config["dname"]);
 
 $deleteClothesNoExpr = "";
 $deleteClothesNoArray = split("\\|", $_POST['deleteClothes']);

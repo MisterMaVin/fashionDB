@@ -1,7 +1,9 @@
 <?php
 // 1. connect to DB
-$conn = mysqli_connect("localhost", "root", "Qwer1234");
-mysqli_select_db($conn, "fashion");
+require("../config/config.php");
+require("../lib/db.php");
+
+$conn = db_init($config["host"], $config["duser"], $config["dpw"], $config["dname"]);
 
 // 2. get file cdnURL
 $photo_location = $_POST['photo_location'];

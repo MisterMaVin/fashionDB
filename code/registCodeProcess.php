@@ -1,7 +1,9 @@
 <?php
 // 1. connect to DB
-$conn = mysqli_connect("localhost", "root", "Qwer1234");
-mysqli_select_db($conn, "fashion");
+require("../config/config.php");
+require("../lib/db.php");
+
+$conn = db_init($config["host"], $config["duser"], $config["dpw"], $config["dname"]);
 
 // 2. insert
 $sql = "INSERT INTO CODE (`CODE`, `CODE_KO`, `DESC`, `PARENT_CODE`) VALUES('".$_POST['code']."', '".$_POST['code_ko']."', '".$_POST['desc']."', '".$_POST['parent_code']."')";
